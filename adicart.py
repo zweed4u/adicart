@@ -9,7 +9,8 @@ class WebSession:
 	def __init__(self):
 		# add user agent array and randomly select for header
 		self.session = requests.session()
-		self.headers = {'User-Agent':self.get_random_user_agent()}
+		#self.headers = {'User-Agent':self.get_random_user_agent()}
+		self.headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'}
 		self.driver = None
 
 	def get_random_user_agent(self):
