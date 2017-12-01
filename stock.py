@@ -42,5 +42,3 @@ shoe = WebSession() # creates a session with headers
 shoe._request('GET', f'https://www.adidas.com/on/demandware.store/Sites-adidas-US-Site/en_US/Product-Show?pid=%20{style_code}')
 shoe.parse()
 print(f'Total Stock: {shoe.get_total_stock()}')
-
-
