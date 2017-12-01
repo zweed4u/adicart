@@ -1,5 +1,6 @@
 #!/usr/bin/python3.6
 import os
+import time
 import random
 import requests
 from selenium import webdriver
@@ -46,6 +47,7 @@ class WebSession:
 				self.headers[key] = headers[key]
 		# implement method params
 		self.response = self.session.request(method, url, headers=self.headers)
+		print(requests.utils.dict_from_cookiejar(self.response.cookies))		
 
 	def fetch_cookies(self):
 		return dict_from_cookiejar(self.response.cookies)
@@ -57,9 +59,11 @@ class WebSession:
 		if self.driver is None:
 			self.start_driver()
 		self.driver.get(cookie_transfer_url) # commonly carts
+		time.sleep(1)
 		self.driver.delete_all_cookies()
 		for key, value in self.fetch_cookies().items():
 		    self.driver.add_cookie({'name': key, 'value': value})
+		time.sleep(1)
 		self.driver.refresh()
 
 # example
