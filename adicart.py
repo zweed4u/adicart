@@ -6,6 +6,23 @@ import requests
 from selenium import webdriver
 from requests.utils import dict_from_cookiejar
 
+colorCodes = {
+	'red':'\033[31m',
+	'orange':'\033[33m',
+	'blue':'\033[34m',
+	'purple':'\033[35m',
+	'cyan':'\033[36m',
+	'lightgrey':'\033[37m',
+	'lightred':'\033[91m',
+	'lightgreen':'\033[92m',
+	'yellow':'\033[93m',
+	'lightblue':'\033[94m',
+	'pink':'\033[95m',
+	'lightcyan':'\033[96m'
+}
+FAIL = '\033[31m'
+COLOR_END = '\033[0m'
+
 class WebSession:
 	def __init__(self):
 		# add user agent array and randomly select for header
@@ -13,6 +30,7 @@ class WebSession:
 		#self.headers = {'User-Agent':self.get_random_user_agent()}
 		self.headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'}
 		self.driver = None
+		self.colorText = random.choice(list(colorCodes.values()))
 
 	def get_random_user_agent(self):
 		user_agent_strings = [
@@ -47,7 +65,11 @@ class WebSession:
 				self.headers[key] = headers[key]
 		# implement method params
 		self.response = self.session.request(method, url, headers=self.headers)
-		print(requests.utils.dict_from_cookiejar(self.response.cookies))		
+		print('\tCookies for EditThisCookie\t')
+		print(f'####################################################################################################################################{self.colorText}')
+		for key, value in requests.utils.dict_from_cookiejar(self.response.cookies).items():
+			print(f'{key}: {value}\n')
+		print(f'{COLOR_END}####################################################################################################################################')
 
 	def fetch_cookies(self):
 		return dict_from_cookiejar(self.response.cookies)
