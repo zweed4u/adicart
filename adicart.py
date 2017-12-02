@@ -96,9 +96,9 @@ class WebSession:
 			id += 1
 		print('\tEditThisCookie Import\t')
 		print(f'####################################################################################################################################{self.colorText}')
-		print(json.dumps(cookie_dict_wrapper, indent=4)) # need to print this as json eg. False to lowercase
+		print(json.dumps(cookie_dict_wrapper, indent=4))
 		print(f'{COLOR_END}####################################################################################################################################')
-		
+
 	def fetch_cookies(self):
 		return dict_from_cookiejar(self.response.cookies)
 
