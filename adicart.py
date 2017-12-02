@@ -89,7 +89,7 @@ class WebSession:
 		self.driver.refresh()
 
 # example
-style_code = 'BZ0223'
+style_code = 'BB6167'
 size_code = '670'
 cart = WebSession() # creates a session with headers
 cart._request('GET', f'https://www.adidas.com/on/demandware.store/Sites-adidas-US-Site/en_US/Cart-UpdateItems?qty_0=1&pid_0=%00{style_code}_{size_code}%00')
