@@ -1,5 +1,6 @@
 #!/usr/bin/python3.6
 import os
+import json
 import time
 import random
 import requests
@@ -22,6 +23,7 @@ colorCodes = {
 }
 FAIL = '\033[31m'
 COLOR_END = '\033[0m'
+
 
 class WebSession:
 	def __init__(self):
@@ -65,12 +67,38 @@ class WebSession:
 				self.headers[key] = headers[key]
 		# implement method params
 		self.response = self.session.request(method, url, headers=self.headers)
-		print('\tCookies for EditThisCookie\t')
-		print(f'####################################################################################################################################{self.colorText}')
-		for key, value in requests.utils.dict_from_cookiejar(self.response.cookies).items():
-			print(f'{key}: {value}\n')
-		print(f'{COLOR_END}####################################################################################################################################')
+		#print('\tCookies for EditThisCookie\t')
+		#print(f'####################################################################################################################################{self.colorText}')
+		#for key, value in requests.utils.dict_from_cookiejar(self.response.cookies).items():
+		#	print(f'{key}: {value}\n')
+		#print(f'{COLOR_END}####################################################################################################################################')
+		self.build_edit_this_cookie(requests.utils.dict_from_cookiejar(self.response.cookies))
 
+	def build_edit_this_cookie(self, requests_cookiejar_dict):
+		cookie_dict_wrapper = []
+		id = 1
+		for key, value in requests_cookiejar_dict.items():
+			dict_template = {
+				"domain": ".adidas.com",
+				"expirationDate": time.time()+7200,  # ~2 hours for bm_ cookies
+				"hostOnly": False,
+				"httpOnly": False,
+				"path": "/",
+				"sameSite": "no_restriction",
+				"secure": False,
+				"session": False,
+				"storeId": "1",
+				"id": id
+			}
+			dict_template['name'] = key
+			dict_template['value'] = value
+			cookie_dict_wrapper.append(dict_template)
+			id += 1
+		print('\tEditThisCookie Import\t')
+		print(f'####################################################################################################################################{self.colorText}')
+		print(json.dumps(cookie_dict_wrapper, indent=4)) # need to print this as json eg. False to lowercase
+		print(f'{COLOR_END}####################################################################################################################################')
+		
 	def fetch_cookies(self):
 		return dict_from_cookiejar(self.response.cookies)
 
@@ -84,7 +112,7 @@ class WebSession:
 		time.sleep(1)
 		self.driver.delete_all_cookies()
 		for key, value in self.fetch_cookies().items():
-		    self.driver.add_cookie({'name': key, 'value': value})
+			self.driver.add_cookie({'name': key, 'value': value})
 		time.sleep(1)
 		self.driver.refresh()
 
